@@ -1,0 +1,633 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#fffaf4" />
+<title>JEE Main — My Study Planner</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+:root {
+  color-scheme: light;
+  --bg: #fffaf4;
+  --text: #39364b;
+  --muted: #9290a3;
+  --line: #eeeaf0;
+  --physics: #65a9e8;
+  --chemistry: #ae91e8;
+  --maths: #62c5a1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at 5% 5%, #fff0dc 0, transparent 30rem),
+    radial-gradient(ellipse at 95% 15%, #eee9ff 0, transparent 32rem),
+    var(--bg);
+  color: var(--text);
+  font-family: "DM Sans", sans-serif;
+}
+
+.shell {
+  width: min(1120px, calc(100% - 36px));
+  margin: 0 auto;
+  padding: 55px 0 75px;
+}
+
+/* HEADER */
+
+.topline {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 17px;
+}
+
+.topline::before {
+  content: "✿";
+  color: #e8a86e;
+  font-size: 19px;
+}
+
+.eyebrow {
+  color: #a18b83;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  font-family: Manrope, sans-serif;
+  font-size: clamp(37px, 6vw, 62px);
+  line-height: 1.12;
+  letter-spacing: -.055em;
+  font-weight: 800;
+  color: #444052;
+}
+
+h1 span {
+  color: #e6a26e;
+}
+
+.subtitle {
+  margin: 14px 0 0;
+  color: #9290a3;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+/* SUBJECT NAVIGATION */
+
+.subject-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 11px;
+  margin: 32px 0 27px;
+}
+
+.subject-nav a {
+  color: #625c72;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 11px 17px;
+  border: 1px solid #eee9ed;
+  border-radius: 999px;
+  background: rgba(255,255,255,.85);
+  box-shadow: 0 3px 12px rgba(80,60,70,.035);
+  transition: .2s ease;
+}
+
+.subject-nav a:hover {
+  transform: translateY(-3px);
+  background: white;
+  border-color: #e5c5a8;
+  box-shadow: 0 6px 15px rgba(80,60,70,.08);
+}
+
+/* PROGRESS */
+
+.sync-panel {
+  max-width: 620px;
+  padding: 21px 23px;
+  border: 1px solid #f0e9e4;
+  border-radius: 20px;
+  background: rgba(255,255,255,.88);
+  box-shadow: 0 7px 25px rgba(90,70,65,.045);
+}
+
+.sync-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  color: #635e70;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+#sync-status {
+  color: #69b994;
+  font-weight: 600;
+  text-align: right;
+}
+
+.progress-track {
+  height: 10px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #f1edf1;
+}
+
+#progress-fill {
+  width: 0%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #f0b88e, #c5a5eb, #83d4b3);
+  transition: width .35s ease;
+}
+
+/* SUBJECT SECTIONS */
+
+.subject {
+  margin-top: 48px;
+  scroll-margin-top: 24px;
+}
+
+.subject-heading {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 19px;
+  font: 800 clamp(24px, 3vw, 31px)/1.2 Manrope, sans-serif;
+  letter-spacing: -.035em;
+  color: #494458;
+}
+
+.subject-heading::before {
+  content: "";
+  width: 6px;
+  height: 31px;
+  border-radius: 8px;
+  background: var(--accent);
+}
+
+.subject-heading small {
+  margin-left: auto;
+  color: #a09aaa;
+  font: 700 11px "DM Sans", sans-serif;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+/* CHAPTER CARDS */
+
+.chapter-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.chapter {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 69px;
+  padding: 15px 18px;
+  border: 1px solid #eeeaf0;
+  border-radius: 16px;
+  background: rgba(255,255,255,.92);
+  box-shadow: 0 4px 13px rgba(75,60,75,.035);
+  transition: border-color .2s, background .2s, transform .2s, box-shadow .2s;
+}
+
+.chapter:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--accent) 45%, white);
+  box-shadow: 0 8px 20px rgba(75,60,75,.075);
+}
+
+/* CHECKBOX */
+
+.chapter input {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  border: 1.7px solid #d9d4df;
+  border-radius: 7px;
+  background: #fff;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: .2s ease;
+}
+
+.chapter input::after {
+  content: "";
+  width: 5px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) scale(0);
+  margin-top: -2px;
+  transition: transform .15s ease;
+}
+
+.chapter input:checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.chapter input:checked::after {
+  transform: rotate(45deg) scale(1);
+}
+
+.chapter input:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  outline-offset: 3px;
+}
+
+/* CHAPTER TEXT */
+
+.chapter-title {
+  color: #575368;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 600;
+  transition: color .2s;
+}
+
+.chapter input:checked + .chapter-title {
+  color: #aaa6b3;
+  text-decoration: line-through;
+  text-decoration-color: #c3bdca;
+}
+
+.unit {
+  margin-left: auto;
+  color: #b5afbd;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  white-space: nowrap;
+}
+
+/* COMPLETED CARD */
+
+.chapter:has(input:checked) {
+  background: #faf9fb;
+  border-color: #eeeaf0;
+}
+
+/* CHEMISTRY GROUPS */
+
+.chem-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 27px 0 13px;
+  color: #a18bc4;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.chem-group::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: #eee8f3;
+}
+
+.chem-group:first-of-type {
+  margin-top: 0;
+}
+
+/* SUBJECT COLORS */
+
+.physics {
+  --accent: var(--physics);
+}
+
+.chemistry {
+  --accent: var(--chemistry);
+}
+
+.maths {
+  --accent: var(--maths);
+}
+
+/* FOOTER */
+
+.footer-line {
+  height: 1px;
+  margin-top: 60px;
+  background: linear-gradient(90deg, transparent, #eae3e7, transparent);
+}
+
+.footer-note {
+  text-align: center;
+  margin-top: 22px;
+  color: #aaa3b0;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+  .shell {
+    width: min(100% - 28px, 560px);
+    padding-top: 38px;
+  }
+
+  .chapter-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .subject-nav {
+    margin: 26px 0;
+    gap: 8px;
+  }
+
+  .subject-nav a {
+    padding: 10px 13px;
+    font-size: 12px;
+  }
+
+  .chapter {
+    min-height: 64px;
+    padding: 13px 15px;
+  }
+
+  .subject-heading small {
+    font-size: 9px;
+  }
+
+  .sync-panel {
+    padding: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}
+</style>
+</head>
+
+<body>
+<main class="shell">
+
+  <header>
+    <div class="topline">
+      <div class="eyebrow">JEE Main · Paper 1</div>
+    </div>
+
+    <h1><span>One step</span><br>closer every day.</h1>
+
+    <p class="subtitle">
+      Your little space to learn, grow and make progress.<br>
+      One chapter at a time. You've got this! 🌷
+    </p>
+
+    <nav class="subject-nav" aria-label="Subjects">
+      <a href="#physics">01 · Physics</a>
+      <a href="#chemistry">02 · Chemistry</a>
+      <a href="#mathematics">03 · Mathematics</a>
+    </nav>
+
+    <div class="sync-panel" aria-live="polite">
+      <div class="sync-top">
+        <span id="progress-label">0 of 54 chapters completed</span>
+        <span id="sync-status">Connecting…</span>
+      </div>
+      <div class="progress-track">
+        <div id="progress-fill"></div>
+      </div>
+    </div>
+  </header>
+
+  <section class="subject physics" id="physics">
+    <h2 class="subject-heading">Physics <small>20 units</small></h2>
+    <div class="chapter-grid">
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Units and Measurements</span><span class="unit">01</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Kinematics</span><span class="unit">02</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Laws of Motion</span><span class="unit">03</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Work, Energy and Power</span><span class="unit">04</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Rotational Motion</span><span class="unit">05</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Gravitation</span><span class="unit">06</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Properties of Solids and Liquids</span><span class="unit">07</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Thermodynamics</span><span class="unit">08</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Kinetic Theory of Gases</span><span class="unit">09</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Oscillations and Waves</span><span class="unit">10</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Electrostatics</span><span class="unit">11</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Current Electricity</span><span class="unit">12</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Magnetic Effects of Current and Magnetism</span><span class="unit">13</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Electromagnetic Induction and Alternating Currents</span><span class="unit">14</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Electromagnetic Waves</span><span class="unit">15</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Optics</span><span class="unit">16</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Dual Nature of Matter and Radiation</span><span class="unit">17</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Atoms and Nuclei</span><span class="unit">18</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Electronic Devices</span><span class="unit">19</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Experimental Skills</span><span class="unit">20</span></label>
+    </div>
+  </section>
+
+  <section class="subject chemistry" id="chemistry">
+    <h2 class="subject-heading">Chemistry <small>20 units</small></h2>
+
+    <div class="chem-group">Physical Chemistry</div>
+    <div class="chapter-grid">
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Some Basic Concepts in Chemistry</span><span class="unit">01</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Atomic Structure</span><span class="unit">02</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Chemical Bonding and Molecular Structure</span><span class="unit">03</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Chemical Thermodynamics</span><span class="unit">04</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Solutions</span><span class="unit">05</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Equilibrium</span><span class="unit">06</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Redox Reactions and Electrochemistry</span><span class="unit">07</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Chemical Kinetics</span><span class="unit">08</span></label>
+    </div>
+
+    <div class="chem-group">Inorganic Chemistry</div>
+    <div class="chapter-grid">
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Classification of Elements and Periodicity in Properties</span><span class="unit">09</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">p-Block Elements</span><span class="unit">10</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">d- and f-Block Elements</span><span class="unit">11</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Coordination Compounds</span><span class="unit">12</span></label>
+    </div>
+
+    <div class="chem-group">Organic Chemistry</div>
+    <div class="chapter-grid">
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Purification and Characterisation of Organic Compounds</span><span class="unit">13</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Some Basic Principles of Organic Chemistry</span><span class="unit">14</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Hydrocarbons</span><span class="unit">15</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Organic Compounds Containing Halogens</span><span class="unit">16</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Organic Compounds Containing Oxygen</span><span class="unit">17</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Organic Compounds Containing Nitrogen</span><span class="unit">18</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Biomolecules</span><span class="unit">19</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Principles Related to Practical Chemistry</span><span class="unit">20</span></label>
+    </div>
+  </section>
+
+  <section class="subject maths" id="mathematics">
+    <h2 class="subject-heading">Mathematics <small>14 units</small></h2>
+    <div class="chapter-grid">
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Sets, Relations and Functions</span><span class="unit">01</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Complex Numbers and Quadratic Equations</span><span class="unit">02</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Matrices and Determinants</span><span class="unit">03</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Permutations and Combinations</span><span class="unit">04</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Binomial Theorem and Its Simple Applications</span><span class="unit">05</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Sequence and Series</span><span class="unit">06</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Limit, Continuity and Differentiability</span><span class="unit">07</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Integral Calculus</span><span class="unit">08</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Differential Equations</span><span class="unit">09</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Co-ordinate Geometry</span><span class="unit">10</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Three Dimensional Geometry</span><span class="unit">11</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Vector Algebra</span><span class="unit">12</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Statistics and Probability</span><span class="unit">13</span></label>
+      <label class="chapter"><input type="checkbox"><span class="chapter-title">Trigonometry</span><span class="unit">14</span></label>
+    </div>
+  </section>
+
+  <div class="footer-line"></div>
+
+  <footer class="footer-note">
+    Small steps count. Keep showing up. 🌼<br>
+    Made with care, one chapter at a time.
+  </footer>
+
+</main>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
+  import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDBXDGfvTP5-7SWJJBJF8f0yknkM6LjCek",
+    authDomain: "jee-2027-5bba2.firebaseapp.com",
+    projectId: "jee-2027-5bba2",
+    storageBucket: "jee-2027-5bba2.firebasestorage.app",
+    messagingSenderId: "1033052275239",
+    appId: "1:1033052275239:web:77ae57d87dc7fa59154402"
+  };
+
+  // Keep this ID unchanged so both devices use the same planner.
+  const PLANNER_ID = "5404d1e6574a09d64034de74f872b2909572f7b6";
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const plannerRef = doc(db, "planners", PLANNER_ID);
+
+  const boxes = [...document.querySelectorAll('.chapter input')];
+  const status = document.getElementById('sync-status');
+  const progressLabel = document.getElementById('progress-label');
+  const progressFill = document.getElementById('progress-fill');
+
+  let applyingRemoteUpdate = false;
+
+  boxes.forEach((box, index) => {
+    box.dataset.chapterKey = `chapter_${index}`;
+  });
+
+  function updateProgress() {
+    const completed = boxes.filter(box => box.checked).length;
+
+    progressLabel.textContent =
+      `${completed} of ${boxes.length} chapters completed`;
+
+    progressFill.style.width =
+      `${(completed / boxes.length) * 100}%`;
+  }
+
+  try {
+    const firstRead = await getDoc(plannerRef);
+
+    if (!firstRead.exists()) {
+      await setDoc(plannerRef, {
+        progress: {},
+        createdAt: new Date().toISOString()
+      });
+    }
+
+    onSnapshot(plannerRef, snapshot => {
+      if (!snapshot.exists()) return;
+
+      const progress = snapshot.data().progress || {};
+
+      applyingRemoteUpdate = true;
+
+      boxes.forEach(box => {
+        box.checked =
+          progress[box.dataset.chapterKey] === true;
+      });
+
+      applyingRemoteUpdate = false;
+
+      updateProgress();
+
+      status.textContent = 'Synced ✓';
+      status.style.color = '#69b994';
+
+    }, error => {
+      console.error(error);
+      status.textContent = 'Sync error';
+      status.style.color = '#df8585';
+    });
+
+    boxes.forEach(box => {
+      box.addEventListener('change', async () => {
+
+        updateProgress();
+
+        if (applyingRemoteUpdate) return;
+
+        status.textContent = 'Saving…';
+        status.style.color = '#b38bd9';
+
+        try {
+          await updateDoc(plannerRef, {
+            [`progress.${box.dataset.chapterKey}`]: box.checked
+          });
+
+        } catch (error) {
+          console.error(error);
+          status.textContent = 'Could not save';
+          status.style.color = '#df8585';
+        }
+      });
+    });
+
+  } catch (error) {
+    console.error(error);
+    status.textContent = 'Connection failed';
+    status.style.color = '#df8585';
+  }
+
+  updateProgress();
+</script>
+
+</body>
+</html>
